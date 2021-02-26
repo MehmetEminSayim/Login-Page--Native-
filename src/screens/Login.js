@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Text, View,SafeAreaView,Button,StyleSheet , Image ,TextInput,ScrollView} from 'react-native'
 import { TouchableOpacity } from "react-native-gesture-handler";
-//import Icon from "react-native-vector-icons/FontAwesome5";
-import { Icon } from 'react-native-elements'
-import { Avatar } from 'react-native-elements';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faAddressBook , faIgloo , faAddressCard } from '@fortawesome/free-solid-svg-icons'
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 export default class Login extends Component {
@@ -48,26 +48,22 @@ export default class Login extends Component {
 
             <View style = {style.social}>
               <TouchableOpacity style = {style.social_item} >
-                <Icon name={"facebook"} />
+                <FontAwesomeIcon icon={ faAddressBook } />
               </TouchableOpacity>
 
               <TouchableOpacity style = {style.social_item} >
-                <Text>Twitter</Text>
+                <FontAwesomeIcon icon={ faIgloo } />
               </TouchableOpacity>
 
               <TouchableOpacity style = {style.social_item} >
-                <Avatar
-                  rounded
-                  source={{
-                    uri:
-                      'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                  }}
-                />
+                <FontAwesomeIcon icon={ faAddressCard } />
               </TouchableOpacity>
             </View>
 
             <View style = {[style.item, { marginTop:10, flexDirection:'row' , justifyContent: 'center', alignItems:'center' , fontSize: 16 , fontWeight: "bold" } ]}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={()=>{ this.props.navigation.navigate('Register')  }}
+              >
                 <Text style = {{ color: '#535464' }} >Don't have an account? Sing up</Text>
               </TouchableOpacity>
             </View>
