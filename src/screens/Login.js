@@ -4,9 +4,23 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAddressBook , faIgloo , faAddressCard } from '@fortawesome/free-solid-svg-icons'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Formik } from "formik"
+import * as Yup from "yup"
+import {observer,inject} from "mobx-react";
 
+@inject("MainStore")
+@observer
 
 export default class Login extends Component {
+
+  _handlersubmit = () =>{
+    alert("form post edildi.")
+  }
+  componentDidMount() {
+
+  }
+
+
 
   render() {
     return (
@@ -14,33 +28,63 @@ export default class Login extends Component {
         <ScrollView>
           <View style = {style.header}>
             <Text style = {style.title}>Sing In</Text>
+            <View>
+              <Text>{this.props.MainStore.fullName}</Text>
+              <TouchableOpacity onPress={ ()=>{ this.props.MainStore.setData("Metge","Yazılım") } }><Text>Değiştir</Text></TouchableOpacity>
+            </View>
+
           </View>
           <View style = {style.logo_area}>
             <Image source={require('../assets/images/homelogo.png')}></Image>
           </View>
           <View style = {style.board}>
-            <View style = {style.item}>
-              <TextInput
-                placeholder = {"Username"}
-                style = { style.input}></TextInput>
-            </View>
+            <Formik
+              initialValues={{
+                  username : '',
+                  password : ''
+                }}
+              validationSchema={Yup.object().shape({
+                username:Yup.string().required("username bos birakilamaz"),
+                password : Yup.string().required("password bos birakilamaz")
+              })}
+              onSubmit={this._handlersubmit}>
+              {({values , handleSubmit , handleChange,errors}) =>(
+                <View>
+                  <View style={style.item}>
+                    <TextInput
+                      value={values.username}
+                      onChangeText={handleChange('username')}
+                      placeholder={"Username"}
+                      style={style.input}></TextInput>
+                    {(errors.username ) && <Text>{errors.username}</Text> }
+                  </View>
+                  <View style={style.item}>
+                    <TextInput
+                      value={values.password}
+                      onChangeText={handleChange('password')}
+                      secureTextEntry={true}
+                      placeholder={"Password"}
+                      style={style.input}></TextInput>
+                    {(errors.password ) && <Text>{errors.password}</Text> }
+                  </View>
+                  <View style={[style.item, {
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    fontSize: 16,
+                    fontWeight: "bold"
+                  }]}>
+                    <Text style={{ color: '#535464' }}>Forgot Your Password</Text>
+                  </View>
+                  <View style={style.item}>
+                    <TouchableOpacity onPress={handleSubmit} style={style.button}>
+                      <Text style={style.buttonText}> Login </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )
+              }
+            </Formik>
 
-            <View style = {style.item}>
-              <TextInput
-                secureTextEntry={true}
-                placeholder = {"Password"}
-                style = { style.input}></TextInput>
-            </View>
-
-            <View style = {[style.item, {flexDirection:'row' , justifyContent: 'flex-end', fontSize: 16 , fontWeight: "bold" } ]}>
-              <Text style = {{ color: '#535464' }} >Forgot Your Password</Text>
-            </View>
-
-            <View style = {style.item}>
-              <TouchableOpacity style = {style.button}>
-                <Text style = {style.buttonText}> Login </Text>
-              </TouchableOpacity>
-            </View>
 
             <View style = {[style.item, {flexDirection:'row' , justifyContent: 'center', alignItems:'center' , fontSize: 16 , fontWeight: "bold" } ]}>
               <Text style = {{ color: '#535464' }} >Or</Text>
